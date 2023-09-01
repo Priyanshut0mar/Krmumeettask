@@ -1,0 +1,41 @@
+import tkinter as tk
+import speech_recognition as sr
+
+def login():
+    recognizer = sr.Recognizer()
+
+    with sr.Microphone() as source:
+        print("Please say your username:")
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
+
+    try:
+        username = recognizer.recognize_google(audio)
+        print(f"Username: {username}")
+
+        # Here, you can add logic to verify the username and password.
+        # For simplicity, we'll just display a message.
+        message_label.config(text=f"Welcome, {username}!")
+
+    except sr.UnknownValueError:
+        print("Could not understand audio")
+    except sr.RequestError as e:
+        print(f"Error recognizing audio: {e}")
+
+# Create the GUI window
+window = tk.Tk()
+window.title("Speech Login")
+
+# Create and configure widgets
+login_label = tk.Label(window, text="Login with Speech")
+login_label.pack(pady=10)
+
+login_button = tk.Button(window, text="Login with Speech", command=login)
+login_button.pack(pady=10)
+
+message_label = tk.Label(window, text="")
+message_label.pack(pady=10)
+
+# Start the GUI application
+window.mainloop()
+
